@@ -1,7 +1,8 @@
 "use client"
 import Todo from "@/Components/todo";
-
-import { useState } from "react";
+import axios from "axios";
+import { set } from "mongoose";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +12,43 @@ export default function Home() {
     title:"",
     desc:""
   });
+
+  const [todos, setTodos] = useState([]);
+  const fetchTodos = async () => {
+    try {
+      const res = await axios.get("/api");
+      setTodos(res.data.todos);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
+  }
+
+  const deleteTodo = async (id:string) => {
+      try {
+          const res = await axios.delete(`/api`, {
+              params: {
+                  mongoId: id
+              }
+          });
+          toast.success(res.data.msg);
+          await fetchTodos();
+      } catch (err) {
+          if (err instanceof Error) {
+              toast.error(err.message);
+          } else {
+              toast.error("An unknown error occurred");
+          }
+      }
+  };
+  
+  
+
+  useEffect(() => {
+    fetchTodos();}, []);
 
   const onChnageHandler=(e: { target: { name: any; value: string; }; })=>{
     const name = e.target.name;
@@ -23,9 +61,11 @@ export default function Home() {
   
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    try{
-      toast.success("Data submitted successfully");
-    }
+    try{      
+      const res = await axios.post("/api",formData);
+      toast.success("Successfully added");
+      setFormData({title:"",desc:""});
+      await fetchTodos();}
     catch(err){
       if (err instanceof Error) {
         toast.error(err.message);
@@ -72,11 +112,13 @@ export default function Home() {
             </tr>
         </thead>
         <tbody>
-            <Todo/>
-            <Todo/>
-            <Todo/>
-            <Todo/>
-            <Todo/>
+            {
+              
+                todos.map((item, index) => (
+                  <Todo key={index} id={index} title={item.title} desc={item.desc} complete={item.isCompleted} mongoId={item._id} deleteTodo={deleteTodo} fetchTodos={fetchTodos}/>
+                ))
+              
+            }
         </tbody>
     </table>
 </div>

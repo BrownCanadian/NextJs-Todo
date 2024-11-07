@@ -7,7 +7,20 @@ const LoadDb = async () => {
 LoadDb();
 
 export async function GET(request){
-    return NextResponse.json({msg: 'Hello World!'});
+    const todo = await TodoModel.find({});
+    return NextResponse.json({todos:todo});
+}
+
+export async function DELETE(request){
+    const mongoId = request.nextUrl.searchParams.get('mongoId');
+    if (!mongoId) {
+        return NextResponse.json({msg: 'No ID provided'}, {status: 400});
+    }
+    const deletedTodo = await TodoModel.findByIdAndDelete(mongoId);
+    if (!deletedTodo) {
+        return NextResponse.json({msg: 'Todo not found'}, {status: 404});
+    }
+    return NextResponse.json({msg: 'Task Done'});
 }
 
 export async function POST(request){
