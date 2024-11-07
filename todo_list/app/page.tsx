@@ -79,17 +79,18 @@ export default function Home() {
   return (
     <>
     <ToastContainer theme="dark"/>
-    <form onSubmit={onSubmitHandler} className="flex items-start flex-col gap-2 w-[80%] ma-w-[600px] mx-auto">
+    <div className ="flex w-[100%] pt-8 jutify-center px-36">
+    <form onSubmit={onSubmitHandler} className="flex mt-16 items-start flex-col gap-2 w-[40%] justify-center ma-w-[600px] mx-auto">
 
-      <input onChange={onChnageHandler} value={formData.title} type="text" placeholder="Enter title" name="title" className="p-3 py-2 border-2 w-full"></input>
-      <textarea onChange={onChnageHandler} value={formData.desc} name="desc" placeholder="Enter description" className="p-3 py-2 border-2 w-full"></textarea>
-      <button type="submit" className="bg-orange-500 text-white py-3 p-11 rounded-md">Submit</button>
+      <input onChange={onChnageHandler} value={formData.title} type="text" placeholder="Enter title" name="title" className=" justify-center p-3 py-2 border-2 w-[75%]"></input>
+      <textarea onChange={onChnageHandler} value={formData.desc} name="desc" placeholder="Enter description" className="p-3 py-2 border-2  w-[75%]"></textarea>
+      <button type="submit" className="bg-orange-500 text-white py-3 p-11 w-auto rounded-md">Submit</button>
       
       </form>
       
       
 
-<div className="relative overflow-x-auto mt-24 w-[60%] mx-auto">
+<div className="relative overflow-x-auto w-[60%] mx-auto">
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -121,6 +122,7 @@ export default function Home() {
             }
         </tbody>
     </table>
+</div>
 </div>
 
       </>
